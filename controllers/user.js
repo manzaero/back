@@ -12,14 +12,18 @@ async function register (name, email, password) {
     const existingUser = await User.findOne({ email });
     if (existingUser) {
         throw new Error("A user with this email already exists");
-        return
     }
 
     const passwordHash = await bcrypt.hash(password, 10);
-    const user = await User.create({name, email,password: passwordHash})
-    const token = generate({id: user.id})
-    return {user, token}
+    const user = await User.create({name, email, password: passwordHash});
+
+    const token = generate({id: user.id});
+
+    console.log('Registered user:', user);
+
+    return { user, token };
 }
+
 async function login (email, password) {
     const user = await User.findOne({email})
 
